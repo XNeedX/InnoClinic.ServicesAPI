@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Services.Application.Abstractions;
-public interface IRepository<T> where T : class
+﻿namespace Services.Application.Abstractions;
+public interface IRepository<T, K> where T : class
 {
-    Task<T> GetByIdAsync(Guid id);
+    Task<T> GetByIdAsync(K id);
     Task AddAsync(T entity);
-    IQueryable<T> Query();
+    void UpdateAsync(T entity);
+    Task<IEnumerable<T>> GetAllAsync();
+    Task SaveChangesAsync();
 }

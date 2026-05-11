@@ -2,9 +2,12 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Services.Application.Abstractions;
+using Services.Application.Handlers;
 using Services.Infrastructure.Data;
-using Services.Domain.Models;
 using Services.Infrastructure.Options;
+using Services.Infrastructure.Repositories;
+using System.Reflection;
 
 namespace Services.Infrastructure.Extensions;
 
@@ -21,8 +24,10 @@ public static class DependencyInjection
             options.UseSqlServer(connectionOptions.DefaultConnection);
         });
 
-
         services.AddScoped<ServicesDbContext>();
+        services.AddScoped<IServiceRepository, ServiceRepository>();
+        services.AddScoped<ISpecializationRepository, SpecializationRepository>();
+        services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
 
         return services;
     }

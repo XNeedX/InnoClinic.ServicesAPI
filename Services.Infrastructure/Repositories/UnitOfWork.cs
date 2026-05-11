@@ -3,7 +3,7 @@ using Services.Infrastructure.Data;
 
 namespace Services.Infrastructure.Repositories;
 
-public class UnitOfWork : IUnitOfWork, IDisposable
+public class UnitOfWork :  IDisposable
 {
     private readonly ServicesDbContext _dbContext;
 

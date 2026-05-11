@@ -4,11 +4,11 @@ using Services.Domain.Models;
 
 namespace Services.Infrastructure.Configuration;
 
-public class ServiceConfiguration : IEntityTypeConfiguration<Service>
+internal class SpecializationConfiguration : IEntityTypeConfiguration<Specialization>
 {
-    public void Configure(EntityTypeBuilder<Service> builder)
+    public void Configure(EntityTypeBuilder<Specialization> builder)
     {
-        builder.ToTable("Services");
+        builder.ToTable("Specializations");
         builder.HasKey(s => s.Id);
 
         builder.Property(s => s.Name).IsRequired().HasMaxLength(100);

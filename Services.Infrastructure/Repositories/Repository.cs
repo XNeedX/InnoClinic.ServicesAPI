@@ -4,7 +4,8 @@ using Services.Infrastructure.Data;
 
 namespace Services.Infrastructure.Repositories;
 
-internal class Repository<T> : IRepository<T> where T : class
+internal class Repository<T, K> : IRepository<T, K>
+    where T : class
 {
     protected readonly ServicesDbContext _dbContext;
     protected readonly DbSet<T> _dbset;
@@ -17,7 +18,11 @@ internal class Repository<T> : IRepository<T> where T : class
 
     public async Task AddAsync(T entity) => await _dbset.AddAsync(entity);
 
-    public async Task<T> GetByIdAsync(Guid id) => await _dbset.FindAsync(id);
+    public async Task<IEnumerable<T>> GetAllAsync() => await _dbset.AsNoTracking().ToListAsync();
 
-    public IQueryable<T> Query() => _dbset.AsQueryable();
+    public Task<T?> GetByIdAsync(K id) => _dbset.FindAsync(id).AsTask();
+
+    public Task SaveChangesAsync() => _dbContext.SaveChangesAsync();
+
+    public void UpdateAsync(T entity) => _dbset.Update(entity);
 }
