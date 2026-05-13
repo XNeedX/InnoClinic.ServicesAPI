@@ -7,53 +7,38 @@ namespace Profiles.Presentation.Controllers;
 [ApiController]
 public abstract class ApiController : ControllerBase
 {
-    protected IActionResult HandleResult<T>(Result<T> result, string? successMessage = null)
-    {
-        if (result.IsSuccess)
+    protected IActionResult HandleResult<T>(Result<T> result, string? successMessage = null) =>
+        result.IsSuccess
+            ? Ok(ApiResponse<T>.Success(result.Value, successMessage))
+            : HandleFailure(result); 
+
+    protected IActionResult HandleResult(Result result, string? successMessage = null) =>
+        result.IsSuccess
+            ? Ok(ApiResponse.Success(successMessage))
+            : HandleFailure(result); 
+
+    protected IActionResult HandleCreatedResult<T>(Result<T> result, string? successMessage = null) =>
+        result.IsSuccess
+            ? StatusCode(201, ApiResponse<T>.Success(result.Value, successMessage))
+            : HandleFailure(result); 
+
+    protected IActionResult HandleFailure(Result result) =>
+        result switch
         {
-            return Ok(ApiResponse<T>.Success(result.Value, successMessage));
-        }
+            { IsSuccess: true } => throw new InvalidOperationException(),
 
-        return HandleFailure(result.Error);
-    }
+            IValidationResult validationResult =>
+                BadRequest(ApiResponse.Failure(
+                    validationResult.Errors.Select(e => e.Message).ToList(),
+                    "Ошибка валидации данных")),
 
-    protected IActionResult HandleResult(Result result, string? successMessage = null)
-    {
-        if (result.IsSuccess)
-        {
-            return Ok(ApiResponse.Success(successMessage));
-        }
-
-        return HandleFailure(result.Error);
-    }
-
-    protected IActionResult HandleCreatedResult<T>(Result<T> result, string? successMessage = null)
-    {
-        if (result.IsSuccess)
-            return StatusCode(201, ApiResponse<T>.Success(result.Value, successMessage));
-
-        return HandleFailure(result.Error);
-    }
-
-    protected IActionResult HandleFailure(Error error)
-    {
-        var apiResponse = ApiResponse.Failure(error.Message);
-
-        return error.Type switch
-        {
-            ErrorType.NotFound => NotFound(apiResponse),
-            ErrorType.Conflict => Conflict(apiResponse),
-            ErrorType.Forbidden => StatusCode(403, apiResponse),
-            ErrorType.Validation => BadRequest(apiResponse),
-            _ => BadRequest(apiResponse)
+            _ => result.Error.Type switch
+            {
+                ErrorType.NotFound => NotFound(ApiResponse.Failure(result.Error.Message)),
+                ErrorType.Conflict => Conflict(ApiResponse.Failure(result.Error.Message)),
+                ErrorType.Forbidden => StatusCode(403, ApiResponse.Failure(result.Error.Message)),
+                ErrorType.Validation => BadRequest(ApiResponse.Failure(result.Error.Message)),
+                _ => BadRequest(ApiResponse.Failure(result.Error.Message))
+            }
         };
-    }
-
-    protected IActionResult HandleValidationFailure(IDictionary<string, string[]> validationErrors)
-    {
-        var errors = validationErrors.SelectMany(kv => kv.Value).ToList();
-
-        var apiResponse = ApiResponse.Failure(errors, "Ошибка валидации данных");
-        return BadRequest(apiResponse);
-    }
 }
