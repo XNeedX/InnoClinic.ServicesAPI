@@ -18,10 +18,10 @@ public class Result
     public static Result Failure(Error error) => new(false, error);
 }
 
-public sealed class Result<T> : Result
+public class Result<T> : Result
 {
     public T Value { get; }
-    private Result(T value, bool isSuccess, Error error) : base(isSuccess, error)
+    protected Result(T value, bool isSuccess, Error error) : base(isSuccess, error)
     {
         Value = value;
     }
