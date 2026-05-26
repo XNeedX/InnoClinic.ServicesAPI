@@ -30,7 +30,7 @@ public abstract class ApiController : ControllerBase
             IValidationResult validationResult =>
                 BadRequest(ApiResponse.Failure(
                     validationResult.Errors.Select(e => e.Message).ToList(),
-                    "Ошибка валидации данных")),
+                    "Validation falure")),
 
             _ => result.Error.Type switch
             {

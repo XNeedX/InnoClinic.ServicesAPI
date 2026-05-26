@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="InnoClinic.Contracts" Version="1.0.0" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.3" />
     <ProjectReference Include="..\Services.Domain\Services.Domain.csproj" />
 	  <InternalVisibleTo Include="Services.Presentation" />
         <InternalVisibleTo Include="Services.Infrastructure" />

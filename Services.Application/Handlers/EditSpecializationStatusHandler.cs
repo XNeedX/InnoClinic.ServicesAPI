@@ -8,36 +8,32 @@ using Services.Application.Results;
 
 namespace Services.Application.Handlers;
 
-public class EditSpecializationHandler : IRequestHandler<EditSpecializationCommand, Result>
+public class EditSpecializationStatusHandler : IRequestHandler<EditSpecializationStatusCommand, Result>
 {
     private readonly ISpecializationRepository _repository;
     private readonly IPublishEndpoint _publishEndpoint;
 
-    public EditSpecializationHandler(ISpecializationRepository repository)
+    public EditSpecializationStatusHandler(ISpecializationRepository repository,
+        IPublishEndpoint publishEndpoint)
     {
         _repository = repository;
+        _publishEndpoint = publishEndpoint;
     }
 
-    public async Task<Result> Handle(EditSpecializationCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(EditSpecializationStatusCommand command, CancellationToken cancellationToken)
     {
-        var specialization = await _repository.GetByIdAsync(request.Id);
+        var specialization = await _repository.GetByIdAsync(command.Id);
 
         if (specialization == null)
             return SpecializationErrors.SpecializationNotFound;
 
-        specialization.Name = request.Name;
-        specialization.Price = request.Price;
-        specialization.Status = request.Status;
-        specialization.Category = request.Category;
+        specialization.Status = command.Status;
 
         await _repository.SaveChangesAsync();
 
-        await _publishEndpoint.Publish<ISpecializationUpdatedEvent>(new
+        await _publishEndpoint.Publish<ISpecializationStatusUpdatedEvent>(new
         {
             Id = specialization.Id,
-            Name = specialization.Name,
-            Price = specialization.Price,
-            Category = (ServiceCategory)specialization.Category,
             Status = (ServiceStatus)specialization.Status
         }, cancellationToken);
 

@@ -36,6 +36,4 @@ internal class Repository<T, K> : IRepository<T, K>
     public Task<T?> GetByIdAsync(K id) => _dbset.FindAsync(id).AsTask();
 
     public Task SaveChangesAsync() => _dbContext.SaveChangesAsync();
-
-    public void UpdateAsync(T entity) => _dbset.Update(entity);
 }

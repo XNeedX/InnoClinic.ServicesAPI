@@ -13,10 +13,6 @@ internal sealed class SpecializationRepository : Repository<Specialization, Guid
     { 
     }
 
-    public Task<Specialization> GetByIdWithServiceAsync(Guid id)
-    {
-        return _dbset
-            .Include(sp => sp.Services)
-            .FirstOrDefaultAsync(sp => sp.Id == id);
-    }
+    public Task<Specialization> GetByIdWithServiceAsync(Guid id) => 
+        _dbset.AsNoTracking().Include(sp => sp.Services).FirstOrDefaultAsync(sp => sp.Id == id);
 }

@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -6,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Services.Application.Abstractions;
 using Services.Application.Behaviours;
-using Services.Domain.Models;
 using Services.Infrastructure.Data;
 using Services.Infrastructure.Options;
 using Services.Infrastructure.Repositories;
@@ -30,7 +30,23 @@ public static class DependencyInjection
         services.AddScoped<IServiceRepository, ServiceRepository>();
         services.AddScoped<ISpecializationRepository, SpecializationRepository>();
         services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
-        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipelimeBehaviour<,>));
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehaviour<,>));
+
+        services.AddMassTransit(busConfigurator =>
+        {
+            busConfigurator.SetKebabCaseEndpointNameFormatter();
+
+            busConfigurator.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.Host(configuration["RabbitMQ:Host"], "/", h =>
+                {
+                    h.Username(configuration["RabbitMQ:Username"]);
+                    h.Password(configuration["RabbitMQ:Password"]);
+                });
+
+                cfg.ConfigureEndpoints(context);
+            });
+        });
 
         services.AddValidatorsFromAssembly(typeof(Services.Application.Extensions.DependencyInjection).Assembly,
             includeInternalTypes: true);

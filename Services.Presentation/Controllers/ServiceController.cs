@@ -53,12 +53,12 @@ public class ServiceController : ApiController
     }
 
     [HttpPatch("{id:guid}/status")]
-    public async Task<IActionResult> EditServiceStatusAsync([FromRoute]Guid id, [FromBody] EditStatusDTO dto, CancellationToken cancellationToken)
+    public async Task<IActionResult> EditServiceStatusAsync([FromRoute] Guid id, [FromBody] EditStatusDTO dto, CancellationToken cancellationToken)
     {
-        var command = new EditStatusCommand<Service>(id, dto.Status);
+        var command = new EditServiceStatusCommand(id, dto.Status);
         var result = await _mediator.Send(command, cancellationToken);
-        
-        if(!result.IsSuccess)
+
+        if (!result.IsSuccess)
             return HandleResult(result);
 
         return NoContent();

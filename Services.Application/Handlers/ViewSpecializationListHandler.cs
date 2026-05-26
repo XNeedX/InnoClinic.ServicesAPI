@@ -18,7 +18,7 @@ public class ViewSpecializationListHandler : IRequestHandler<ViewSpecizalization
     {
         var specializations = await _repository.GetAllAsync();
 
-        if (specializations == null || !specializations.Any())
+        if (specializations == null)
             return SpecializationErrors.SpecializationNotFound;
 
         var specializationDTOs = specializations.Select(s => new ViewSpecializationListDTO(

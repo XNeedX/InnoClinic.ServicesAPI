@@ -49,7 +49,7 @@ public class SpecializationController : ApiController
     [HttpPatch("{id:guid}/status")]
     public async Task<IActionResult> EditSpecializationStatusAsync([FromRoute] Guid id, [FromBody] EditStatusDTO dto, CancellationToken cancellationToken)
     {
-        var command = new EditStatusCommand<Specialization>(id, dto.Status);
+        var command = new EditSpecializationStatusCommand(id, dto.Status);
         var result = await _mediator.Send(command, cancellationToken);
 
         if (!result.IsSuccess)
