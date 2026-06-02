@@ -9,8 +9,8 @@ public class ServicesDbContext : DbContext
     {
     }
 
-    public DbSet<Service> services => Set<Service>();
-    public DbSet<Specialization> specializations => Set<Specialization>();
+    public DbSet<Service> Services => Set<Service>();
+    public DbSet<Specialization> Specializations => Set<Specialization>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

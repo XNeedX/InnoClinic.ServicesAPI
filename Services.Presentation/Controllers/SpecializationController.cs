@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Profiles.Presentation.Controllers;
 using Services.Application.Commands;
 using Services.Application.DTOs;
+using Services.Application.Models;
 using Services.Application.Queries;
 using Services.Domain.Models;
 
@@ -66,9 +67,9 @@ public class SpecializationController : ApiController
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetSpecializationListAsync(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetSpecializationListAsync([FromQuery] PageParams pageParams, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new ViewSpecizalizationListQuery(), cancellationToken);
+        var result = await _mediator.Send(new ViewSpecizalizationListQuery(pageParams), cancellationToken);
         return HandleResult(result);
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Services.Application.Abstractions;
+using Services.Application.Extensions;
+using Services.Application.Models;
 using Services.Infrastructure.Data;
 using System.Linq.Expressions;
 
@@ -31,7 +33,7 @@ internal class Repository<T, K> : IRepository<T, K>
         return await query.ToListAsync();
     }
 
-    public async Task<IEnumerable<T>> GetAllAsync() => await _dbset.AsNoTracking().ToListAsync();
+    public async Task<PagedResult<T>> GetAllPagedAsync(PageParams pageParams) => await _dbset.AsNoTracking().ToPagedAsync(pageParams);
 
     public Task<T?> GetByIdAsync(K id) => _dbset.FindAsync(id).AsTask();
 

@@ -22,7 +22,7 @@ public class EditServiceHandler : IRequestHandler<EditServiceCommand, Result>
 
     public async Task<Result> Handle(EditServiceCommand request, CancellationToken cancellationToken)
     {
-        var service = await _repository.GetByIdAsync(request.id);
+        var service = await _repository.GetByIdAsync(request.Id);
         if (service == null)
             return ServiceErrors.ServiceNotFound;
 
