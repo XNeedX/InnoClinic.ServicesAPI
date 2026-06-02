@@ -19,7 +19,7 @@ internal class Repository<T, K> : IRepository<T, K>
         _dbset = _dbContext.Set<T>();
     }
 
-    public async Task AddAsync(T entity) => await _dbset.AddAsync(entity);
+    public async Task AddAsync(T entity, CancellationToken cancellationToken = default) => await _dbset.AddAsync(entity);
 
     public async Task<IEnumerable<T>> FindByFilterAsync(Expression<Func<T, bool>> expression, params Expression<Func<T, object>>[] includes)
     {
@@ -35,7 +35,7 @@ internal class Repository<T, K> : IRepository<T, K>
 
     public async Task<PagedResult<T>> GetAllPagedAsync(PageParams pageParams) => await _dbset.AsNoTracking().ToPagedAsync(pageParams);
 
-    public Task<T?> GetByIdAsync(K id) => _dbset.FindAsync(id).AsTask();
+    public Task<T?> GetByIdAsync(K id, CancellationToken cancellationToken = default) => _dbset.FindAsync(id).AsTask();
 
-    public Task SaveChangesAsync() => _dbContext.SaveChangesAsync();
+    public Task SaveChangesAsync(CancellationToken cancellationToken = default) => _dbContext.SaveChangesAsync();
 }

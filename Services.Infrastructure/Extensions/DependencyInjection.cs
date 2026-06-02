@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Services.Application.Abstractions;
 using Services.Application.Behaviours;
+using Services.Application.Commands;
 using Services.Infrastructure.Data;
 using Services.Infrastructure.Options;
 using Services.Infrastructure.Repositories;
@@ -48,8 +49,7 @@ public static class DependencyInjection
             });
         });
 
-        services.AddValidatorsFromAssembly(typeof(Services.Application.Extensions.DependencyInjection).Assembly,
-            includeInternalTypes: true);
+        services.AddValidatorsFromAssembly(typeof(CreateServiceCommand).Assembly, includeInternalTypes: true);
 
         return services;
     }

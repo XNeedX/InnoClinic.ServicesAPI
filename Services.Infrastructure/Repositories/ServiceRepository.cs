@@ -11,16 +11,4 @@ internal sealed class ServiceRepository : Repository<Service, Guid>, IServiceRep
         : base(dbContext)
     {
     }
-
-    //public async Task<Result> ChangeStatus(Guid serviceId, Status newStatus)
-    //{
-    //    var service = await GetByIdAsync(serviceId);
-
-    //    if (service == null)
-    //        return ServiceErrors.ServiceNotFound;
-
-    //    service.Status = newStatus;
-
-    //    return Result.Success();
-    //}
 }

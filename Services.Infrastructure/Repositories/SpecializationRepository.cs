@@ -1,8 +1,7 @@
-﻿using Services.Application.Abstractions;
-using Services.Application.Results;
+﻿using Microsoft.EntityFrameworkCore;
+using Services.Application.Abstractions;
 using Services.Domain.Models;
 using Services.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace Services.Infrastructure.Repositories;
 
@@ -13,6 +12,6 @@ internal sealed class SpecializationRepository : Repository<Specialization, Guid
     { 
     }
 
-    public Task<Specialization> GetByIdWithServiceAsync(Guid id) => 
+    public Task<Specialization?> GetByIdWithServiceAsync(Guid id, CancellationToken cancellationToken = default) => 
         _dbset.AsNoTracking().Include(sp => sp.Services).FirstOrDefaultAsync(sp => sp.Id == id);
 }
