@@ -1,12 +1,13 @@
 ﻿using MediatR;
 using Services.Application.Abstractions;
 using Services.Application.DTOs;
+using Services.Application.Models;
 using Services.Application.Queries;
 using Services.Application.Results;
 
 namespace Services.Application.Handlers;
 
-public class ViewSpecializationListHandler : IRequestHandler<ViewSpecizalizationListQuery, Result<List<ViewSpecializationListDTO>>>
+public class ViewSpecializationListHandler : IRequestHandler<ViewSpecizalizationListQuery, Result<PagedResult<ViewSpecializationListDTO>>>
 {
     private readonly ISpecializationRepository _repository;
     public ViewSpecializationListHandler(ISpecializationRepository repository)
@@ -14,19 +15,18 @@ public class ViewSpecializationListHandler : IRequestHandler<ViewSpecizalization
         _repository = repository;
     }
 
-    public async Task<Result<List<ViewSpecializationListDTO>>> Handle(ViewSpecizalizationListQuery request, CancellationToken cancellationToken)
+    public async Task<Result<PagedResult<ViewSpecializationListDTO>>> Handle(ViewSpecizalizationListQuery request, CancellationToken cancellationToken)
     {
-        var specializations = await _repository.GetAllAsync();
+        var pagedEntities = await _repository.GetAllPagedAsync(request.PageParams);
 
-        if (specializations == null || !specializations.Any())
-            return SpecializationErrors.SpecializationNotFound;
-
-        var specializationDTOs = specializations.Select(s => new ViewSpecializationListDTO(
+        var specializationDTOs = pagedEntities.Items.Select(s => new ViewSpecializationListDTO(
             Id: s.Id,
             Name: s.Name,
             Status: s.Status
         )).ToList();
 
-        return Result<List<ViewSpecializationListDTO>>.Success(specializationDTOs);
+        var pagedResult = new PagedResult<ViewSpecializationListDTO>(specializationDTOs, pagedEntities.TotalCount);
+
+        return Result<PagedResult<ViewSpecializationListDTO>>.Success(pagedResult);
     }
 }

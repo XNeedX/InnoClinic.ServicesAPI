@@ -7,7 +7,7 @@ public class EditServiceCommandValidator : AbstractValidator<EditServiceCommand>
 {
     public EditServiceCommandValidator()
     {
-        RuleFor(x => x.id)
+        RuleFor(x => x.Id)
             .NotEmpty().WithMessage("Service ID is required");
 
         RuleFor(x => x.Name)

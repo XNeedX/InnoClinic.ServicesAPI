@@ -1,18 +1,16 @@
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using Services.Application.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using Services.Application.Commands;
 using Services.Infrastructure.Extensions;
 using Services.Presentation.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-
 builder.Services.AddInfrastructureLayer(builder.Configuration);
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Services.Application.Extensions.DependencyInjection).Assembly));
-builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateServiceCommand).Assembly));
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
-    containerBuilder.AddApplicationLayer();
+    options.SuppressModelStateInvalidFilter = true;
 });
 
 builder.Services.AddControllers();

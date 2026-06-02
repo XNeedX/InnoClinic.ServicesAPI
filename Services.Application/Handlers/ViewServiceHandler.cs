@@ -1,9 +1,8 @@
-﻿using Services.Application.Abstractions;
-using Services.Application.Abstractions.Messaging;
+﻿using MediatR;
+using Services.Application.Abstractions;
 using Services.Application.DTOs;
 using Services.Application.Queries;
 using Services.Application.Results;
-using MediatR;
 
 namespace Services.Application.Handlers;
 
