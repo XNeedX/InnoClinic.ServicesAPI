@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Profiles.Presentation.Controllers;
 using Services.Application.Commands;
@@ -22,6 +23,7 @@ public class SpecializationController : ApiController
     }
 
     [HttpPost]
+    [Authorize(Roles = "Receptionist")]
     public async Task<IActionResult> CreateSpecializationAsync([FromBody] CreateSpecializationCommand command, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(command, cancellationToken);
@@ -30,6 +32,7 @@ public class SpecializationController : ApiController
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize(Roles = "Receptionist")]
     public async Task<IActionResult> EditSpecializationAsync([FromRoute] Guid id, [FromBody] EditSpecializationDTO dto, CancellationToken cancellationToken)
     {
         var command = new EditSpecializationCommand(
@@ -48,6 +51,7 @@ public class SpecializationController : ApiController
     }
 
     [HttpPatch("{id:guid}/status")]
+    [Authorize(Roles = "Receptionist")]
     public async Task<IActionResult> EditSpecializationStatusAsync([FromRoute] Guid id, [FromBody] EditStatusDTO dto, CancellationToken cancellationToken)
     {
         var command = new EditSpecializationStatusCommand(id, dto.Status);
@@ -60,6 +64,7 @@ public class SpecializationController : ApiController
     }
 
     [HttpGet("{id:guid}")]
+    [Authorize(Roles = "Receptionist")]
     public async Task<IActionResult> GetSpecializationAsync(Guid id, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new ViewSpecializationQuery(id), cancellationToken);
@@ -67,6 +72,7 @@ public class SpecializationController : ApiController
     }
 
     [HttpGet]
+    [Authorize(Roles = "Receptionist")]
     public async Task<IActionResult> GetSpecializationListAsync([FromQuery] PageParams pageParams, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new ViewSpecizalizationListQuery(pageParams), cancellationToken);

@@ -5,6 +5,7 @@ using Services.Application.Commands;
 using Services.Application.Queries;
 using Services.Application.DTOs;
 using Services.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Services.Presentation.Controllers;
 
@@ -20,6 +21,7 @@ public class ServiceController : ApiController
     }
 
     [HttpPost]
+    [Authorize(Roles = "Receptionist")]
     public async Task<IActionResult> CreateServiceAsync([FromBody] CreateServiceCommand command, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(command, cancellationToken);
@@ -28,6 +30,7 @@ public class ServiceController : ApiController
     }
 
     [HttpGet("{id:guid}")]
+    [Authorize(Roles = "Receptionist")]
     public async Task<IActionResult> GetServiceByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new ViewServiceQuery(id), cancellationToken);
@@ -35,6 +38,7 @@ public class ServiceController : ApiController
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize(Roles = "Receptionist")]
     public async Task<IActionResult> EditServiceAsync([FromRoute]Guid id, [FromBody] EditServiceDTO dto, CancellationToken cancellationToken) 
     { 
         var command = new EditServiceCommand(
@@ -53,6 +57,7 @@ public class ServiceController : ApiController
     }
 
     [HttpPatch("{id:guid}/status")]
+    [Authorize(Roles = "Receptionist")]
     public async Task<IActionResult> EditServiceStatusAsync([FromRoute] Guid id, [FromBody] EditStatusDTO dto, CancellationToken cancellationToken)
     {
         var command = new EditServiceStatusCommand(id, dto.Status);
@@ -65,6 +70,7 @@ public class ServiceController : ApiController
     }
 
     [HttpGet("by-category/{category}")]
+    [Authorize(Roles = "Patient")]
     public async Task<IActionResult> GetServicesByCategoryAsync([FromRoute] Category category, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new ViewServiceByCategoryQuery(category), cancellationToken);

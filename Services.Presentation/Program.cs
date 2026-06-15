@@ -1,3 +1,4 @@
+using InnoClinic.Profiles.Api.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Services.Application.Commands;
 using Services.Infrastructure.Extensions;
@@ -14,8 +15,9 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 });
 
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer(); 
-builder.Services.AddSwaggerGen();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddKeycloakAuth(builder.Configuration);
+builder.Services.AddSwaggerWithAuth(builder.Configuration);
 
 var app = builder.Build();
 
