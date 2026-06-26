@@ -1,4 +1,8 @@
 <Solution>
+  <Folder Name="/Tests/">
+    <Project Path="Services.Application.UnitTests/Services.Application.UnitTests.csproj" Id="7add2daf-8266-4783-a857-4bdbb3b77e20" />
+    <Project Path="Services.Presentation.UnitTests/Services.Presentation.UnitTests.csproj" Id="a659321d-43ff-41b0-9eaf-d3d2f1b5196f" />
+  </Folder>
   <Folder Name="/Элементы решения/">
     <File Path="nuget.config" />
   </Folder>
