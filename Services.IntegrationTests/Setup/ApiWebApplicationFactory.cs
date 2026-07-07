@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Services.Infrastructure.Data;
+using Services.IntegrationTests.Setup;
 using Testcontainers.MsSql;
 using Xunit;
 
@@ -28,6 +30,10 @@ public class ApiWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLi
             {
                 options.UseSqlServer(_dbContainer.GetConnectionString());
             });
+
+            services.AddAuthentication(TestAuthHandler.AuthenticationScheme)
+                .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
+                    TestAuthHandler.AuthenticationScheme, options => { });
         });
     }
 

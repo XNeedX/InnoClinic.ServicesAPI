@@ -6,6 +6,7 @@
     <Project Path="Services.IntegrationTests/Services.IntegrationTests.csproj" Id="86b89263-d9d2-405c-8473-6ca03daa98bc" />
   </Folder>
   <Folder Name="/Элементы решения/">
+    <File Path="Dockerfile" />
     <File Path="nuget.config" />
   </Folder>
   <Project Path="Services.Application/Services.Application.csproj" />

@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Services.Infrastructure.Data;
+using Services.IntegrationTests.Setup;
+using System.Net.Http.Headers;
 using Xunit;
 
 public abstract class BaseIntegrationTest : IClassFixture<ApiWebApplicationFactory>, IAsyncDisposable
@@ -13,7 +15,9 @@ public abstract class BaseIntegrationTest : IClassFixture<ApiWebApplicationFacto
     protected BaseIntegrationTest(ApiWebApplicationFactory factory)
     {
         Factory = factory;
-        Client = factory.CreateClient(); 
+        Client = factory.CreateClient();
+
+        Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(TestAuthHandler.AuthenticationScheme);
 
         _scope = factory.Services.CreateScope();
         DbContext = _scope.ServiceProvider.GetRequiredService<ServicesDbContext>();
