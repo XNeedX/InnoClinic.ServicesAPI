@@ -1,0 +1,16 @@
+<Solution>
+  <Folder Name="/Tests/">
+    <Project Path="Services.Application.UnitTests/Services.Application.UnitTests.csproj" Id="7add2daf-8266-4783-a857-4bdbb3b77e20" />
+  </Folder>
+  <Folder Name="/Tests/Integration tests/">
+    <Project Path="Services.IntegrationTests/Services.IntegrationTests.csproj" Id="86b89263-d9d2-405c-8473-6ca03daa98bc" />
+  </Folder>
+  <Folder Name="/Элементы решения/">
+    <File Path="Dockerfile" />
+    <File Path="nuget.config" />
+  </Folder>
+  <Project Path="Services.Application/Services.Application.csproj" />
+  <Project Path="Services.Domain/Services.Domain.csproj" />
+  <Project Path="Services.Infrastructure/Services.Infrastructure.csproj" />
+  <Project Path="Services.Presentation/Services.Presentation.csproj" />
+</Solution>
