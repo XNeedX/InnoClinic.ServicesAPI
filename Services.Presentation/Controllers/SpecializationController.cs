@@ -64,7 +64,7 @@ public class SpecializationController : ApiController
     }
 
     [HttpGet("{id:guid}")]
-    [Authorize(Roles = "Receptionist")]
+    [Authorize(Roles = "Patient, Receptionist")]
     public async Task<IActionResult> GetSpecializationAsync(Guid id, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new ViewSpecializationQuery(id), cancellationToken);
@@ -72,7 +72,7 @@ public class SpecializationController : ApiController
     }
 
     [HttpGet]
-    [Authorize(Roles = "Receptionist")]
+    [Authorize(Roles = "Patient, Receptionist")]
     public async Task<IActionResult> GetSpecializationListAsync([FromQuery] PageParams pageParams, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new ViewSpecizalizationListQuery(pageParams), cancellationToken);
